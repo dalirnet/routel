@@ -20,9 +20,10 @@ const routel = (options = {}) => {
 
     return {
         name: config.name,
-        enforce: 'post',
         configResolved({ build }) {
-            config.path = path.resolve(build.rollupOptions.input, config.manifest)
+            if (!config.path) {
+                config.path = path.resolve(build.rollupOptions.input.start || build.rollupOptions.input, config.manifest)
+            }
         },
         resolveId(id) {
             return id === config.id ? id : null
