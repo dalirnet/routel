@@ -1,0 +1,20 @@
+{
+    "name": "routel",
+    "version": "1.0.0",
+    "description": "SvelteKit navigation patch",
+    "main": "index.js",
+    "type": "module",
+    "repository": "https://github.com/dalirnet/routel.git",
+    "author": "Amir Reza Dalir <dalirnet@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "lodash": "^4.17.21"
+    },
+    "keywords": [
+        "svelte",
+        "sveltekit",
+        "router",
+        "navigation",
+        "goto"
+    ]
+}

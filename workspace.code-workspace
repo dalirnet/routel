@@ -1,0 +1,19 @@
+{
+    "folders": [
+        {
+            "name": "Plugin",
+            "path": "plugin"
+        },
+        {
+            "name": "Routel",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/node_modules": true,
+            "**/.*": true,
+            "**/*.lock": true
+        }
+    }
+}
