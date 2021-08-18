@@ -13,12 +13,18 @@ npm install routel
 Add the following values to `svelte.config.js`
 
 ```javascript
-import routel from "routel/plugin"
+import routel from "routel/plugin/index.js"
 
 export default {
     kit: {
         vite: {
             plugins: [routel()],
+            optimizeDeps: {
+                exclude: ["routel"],
+            },
+            ssr: {
+                noExternal: ["routel"],
+            },
         },
     },
 }

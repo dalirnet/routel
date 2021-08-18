@@ -1,53 +1,33 @@
 import routes from '$routel'
 import * as navigation from '$app/navigation'
-import _get from 'lodash/get'
-import _reduce from 'lodash/reduce'
-import _isEmpty from 'lodash/isEmpty'
-import _trimEnd from 'lodash/trimEnd'
-import _camelCase from 'lodash/camelCase'
-import _escapeRegExp from 'lodash/escapeRegExp'
 
 const resolve = (path) => {
     if (typeof path !== 'object') {
         return path
     }
 
-    let href = _get(path, 'path', '/')
+    let href = typeof path.base === 'string' ? path.base : '/'
 
-    const name = _get(path, 'name')
-    if (name) {
-        const route = _get(routes, name, _get(routes, _camelCase(name).toLowerCase()))
-        if (route) {
-            const params = _get(path, 'params', {})
-            href = _reduce(
-                route.params,
-                (href, pattern, param) => {
-                    return href.replace(new RegExp(_escapeRegExp(pattern), 'g'), _get(params, param, param))
-                },
-                route.path
-            )
-        } else {
-            href = name
-        }
-
-        href = _trimEnd(href, '/')
+    const name = (path.name || '').replace(/[-_\s]/g, '').toLowerCase()
+    const route = routes[name]
+    if (route) {
+        const params = path.params || {}
+        href = Object.entries(route.params).reduce((href, [key, pattern]) => {
+            return href.replace(pattern, params[key] || key)
+        }, route.path)
+    } else {
+        href = name
     }
 
-    const query = _get(path, 'query', {})
-    if (!_isEmpty(query)) {
-        let queries = _reduce(
-            query,
-            (keep, value, key) => {
-                keep.push([encodeURIComponent(key), encodeURIComponent(value)].join('='))
-
-                return keep
-            },
-            []
-        )
-        href += '?' + queries.join('&')
+    const query = Object.entries(path.query || {}).reduce((keep, [value, key]) => {
+        keep.push([encodeURIComponent(key), encodeURIComponent(value)].join('='))
+        return keep
+    }, [])
+    if (query.length) {
+        href += '?' + query.join('&')
     }
 
-    const hash = _get(path, 'hash')
+    const hash = path.hash
     if (hash) {
         href += '#' + hash
     }
@@ -55,8 +35,8 @@ const resolve = (path) => {
     return href
 }
 
-const goto = (path, options) => {
-    if (_get(options, 'legacy')) {
+const goto = (path, options = {}) => {
+    if (options.legacy) {
         return navigation.goto(path, options)
     }
 

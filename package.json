@@ -1,6 +1,6 @@
 {
     "name": "routel",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "SvelteKit navigation patch",
     "main": "index.js",
     "type": "module",
